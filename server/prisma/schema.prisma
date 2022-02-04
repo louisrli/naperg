@@ -3,10 +3,12 @@ generator client {
 }
 
 datasource db {
+  // LL: What is SQLite?
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
+// This comes with the boilerplate.
 model User {
   id                  String          @id @default(cuid())
   createdAt                        DateTime        @default(now())
@@ -14,7 +16,8 @@ model User {
   email           String  @unique
   password      String
   role          String
-  lastLogin     DateTime?
+  lastLogin     DateTime?  
+  // LL: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
   resetPasswordToken String
   dateResetPasswordRequest DateTime?
   validateEmailToken String
@@ -22,5 +25,11 @@ model User {
   name  String
 }
 
+model Feed {
+}
 
+model Source {
+}
 
+model Article {
+}
