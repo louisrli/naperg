@@ -84,7 +84,6 @@ model Source {
   id                  Int                   @id @default(autoincrement())
   title               String
   posts               Post[]
-  feeds               Feed[]
   userSourceFavorites UserSourceFavorite[]
   sourceFeedRelations SourceFeedRelations[]
 
@@ -95,8 +94,6 @@ model Feed {
   id                  Int                   @id @default(autoincrement())
   user                User                  @relation(fields: [userId], references: [id])
   userId              Int
-  sources             Source[]              @relation(fields: [sourceId], references: [id])
-  sourceId            Int
   sourceFeedRelations SourceFeedRelations[]
   isFavorite          Boolean
 
