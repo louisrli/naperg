@@ -8,62 +8,58 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-// This comes with the boilerplate.
-// model User {
-//   id                  String          @id @default(cuid())
-//   createdAt                        DateTime        @default(now())
-//   updatedAt                        DateTime        @updatedAt
-//   email           String  @unique
-//   password      String
-//   role          String
-//   lastLogin     DateTime?
-//   // LL: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
-//   resetPasswordToken String
-//   dateResetPasswordRequest DateTime?
-//   validateEmailToken String
-//   isEmailValidated Boolean
-//   name  String
-// }
-
 model User {
-  id                 Int                  @id @default(autoincrement())
-  firstName          String
-  lastName           String
-  email              String               @unique
-  subscription       Subscription         @relation(fields: [subscriptionId], references: [id])
-  subscriptionId     Int
-  feed               Feed[]
-  board              Board[]
-  Post               Post[]
-  UserSourceFavorite UserSourceFavorite[]
-  createdAt          DateTime             @default(now())
-  // setting            Setting
-  Setting            Setting[]
+  id                        Int                         @id @default(autoincrement())
+  firstName                 String
+  lastName                  String
+  email                     String                      @unique
+  feed                      Feed[]
+  board                     Board[]
+  post                      Post[]
+  userSourceFavorite        UserSourceFavorite[]
+  createdAt                 DateTime                    @default(now())
+  setting                   Setting?
+  userActivatedSubscription UserActivatedSubscription[]
+
+  @@map("users")
 }
 
 // user settings like theme
 
 model Setting {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
+  theme  String
+
+  @@map("settings")
 }
 
 // integrations
 
 model Subscription {
-  id           Int      @id @default(autoincrement())
-  User         User[]
-  // type         SubscriptionType
-  priceInCents Int
-  description  String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                        Int                         @id @default(autoincrement())
+  type                      String
+  priceInCents              Int
+  description               String
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt
+  subscriptionTypeId        Int
+  userActivatedSubscription UserActivatedSubscription[]
+
+  @@map("subscriptions")
 }
 
-model SubscriptionType {
-  // FREE
-  // PRO
+model UserActivatedSubscription {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now())
+  user           User[]         @relation(fields: [userId], references: [id])
+  userId         Int
+  subscription   Subscription[] @relation(fields: [subscriptionId], references: [id])
+  subscriptionId Int
+  expiredAt      DateTime
+
+  @@map("user_activated_subscriptions")
 }
 
 model Post {
@@ -71,12 +67,12 @@ model Post {
   name      String
   source    Source   @relation(fields: [sourceId], references: [id])
   sourceId  Int
-  // author    User     @relation(fields: [userId], references: [id])
-  // userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
   userId    Int?
+
+  @@map("posts")
 }
 
 model Source {
@@ -84,7 +80,9 @@ model Source {
   title              String
   post               Post[]
   feed               Feed[]
-  UserSourceFavorite UserSourceFavorite[]
+  userSourceFavorite UserSourceFavorite[]
+
+  @@map("sources")
 }
 
 model UserSourceFavorite {
@@ -93,6 +91,8 @@ model UserSourceFavorite {
   userId   Int
   source   Source[] @relation(fields: [sourceId], references: [id])
   sourceId Int
+
+  @@map("user_source_favorites")
 }
 
 model Feed {
@@ -102,6 +102,8 @@ model Feed {
   source     Source[] @relation(fields: [sourceId], references: [id])
   sourceId   Int
   isFavorite Boolean
+
+  @@map("feeds")
 }
 
 model Board {
@@ -109,4 +111,6 @@ model Board {
   user       User    @relation(fields: [userId], references: [id])
   userId     Int
   isFavorite Boolean
+
+  @@map("boards")
 }
