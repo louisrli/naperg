@@ -16,20 +16,80 @@ model User {
   email           String  @unique
   password      String
   role          String
-  lastLogin     DateTime?  
-  // LL: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
+  lastLogin     DateTime?
   resetPasswordToken String
   dateResetPasswordRequest DateTime?
   validateEmailToken String
   isEmailValidated Boolean
   name  String
+  feeds Feed[]  // one to many
+  articles ArticlesOnUsers[]
+  settings                 Settings?
+  subscriptionPlans SubscriptionPlan[]
 }
 
 model Feed {
+  id        String   @id @default(cuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? //admin could delete
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  sources   Source[]  // one to many
 }
 
 model Source {
+  id                  String          @id @default(cuid())
+  createdAt                        DateTime        @default(now())
+  updatedAt                        DateTime        @updatedAt
+  slug String //url
+  title String
+  deletedAt DateTime? //admin could delete
+  feed Feed @relation(fields: [feedId], references: [id])
+  feedId String
+  articles          Article[]
 }
 
 model Article {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime? //admin could delete
+  source      Source   @relation(fields: [sourceId], references: [id])
+  sourceId    String
+  author      String?
+  title       String
+  slug        String //url
+  shortContent String
+  users ArticlesOnUsers[]
+}
+
+model ArticlesOnUsers {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String // relation scalar field (used in the `@relation` attribute above)
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId String // relation scalar field (used in the `@relation` attribute above)
+  isRead      Boolean
+  isFavorite  Boolean
+
+  @@id([userId, articleId])
+}
+
+model Settings {
+  id       String    @id @default(cuid())
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String
+  language String // ru en
+  theme    String // light dark
+}
+
+model SubscriptionPlan {
+  id       String    @id @default(cuid())
+  type String // pro pro+ enterprise
+  createdAt DateTime @default(now())
+  expirationDate DateTime
+  originalExpirationDate DateTime
+  user   User @relation(fields: [userId], references: [id])
+  userId String
 }
