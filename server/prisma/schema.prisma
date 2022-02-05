@@ -15,12 +15,12 @@ model User {
   email                     String                      @unique
   feed                      Feed[]
   board                     Board[]
-  post                      Post[]
   userSourceFavorite        UserSourceFavorite[]
+  userActivatedSubscription UserActivatedSubscription[]
   createdAt                 DateTime                    @default(now())
   setting                   Setting?
-  userActivatedSubscription UserActivatedSubscription[]
 
+  Post Post[]
   @@map("users")
 }
 
@@ -30,6 +30,7 @@ model Setting {
   id     Int    @id @default(autoincrement())
   user   User   @relation(fields: [userId], references: [id])
   userId Int    @unique
+  /// light or dark
   theme  String
 
   @@map("settings")
@@ -37,25 +38,26 @@ model Setting {
 
 // integrations
 
-model Subscription {
+model SubscriptionSpec {
   id                        Int                         @id @default(autoincrement())
+  /// FREE / PRO / TRIAL
   type                      String
   priceInCents              Int
   description               String
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @updatedAt
-  subscriptionTypeId        Int
   userActivatedSubscription UserActivatedSubscription[]
 
   @@map("subscriptions")
 }
 
+/// subscriptions which are were bougth by User
 model UserActivatedSubscription {
-  id             Int            @id @default(autoincrement())
-  createdAt      DateTime       @default(now())
-  user           User[]         @relation(fields: [userId], references: [id])
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  user           User             @relation(fields: [userId], references: [id])
   userId         Int
-  subscription   Subscription[] @relation(fields: [subscriptionId], references: [id])
+  subscription   SubscriptionSpec @relation(fields: [subscriptionId], references: [id])
   subscriptionId Int
   expiredAt      DateTime
 
@@ -64,7 +66,10 @@ model UserActivatedSubscription {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  name      String
+  title     String
+  content   String
+  sourceUrl String
+  imgUrl    String?
   source    Source   @relation(fields: [sourceId], references: [id])
   sourceId  Int
   createdAt DateTime @default(now())
@@ -76,34 +81,44 @@ model Post {
 }
 
 model Source {
-  id                 Int                  @id @default(autoincrement())
-  title              String
-  post               Post[]
-  feed               Feed[]
-  userSourceFavorite UserSourceFavorite[]
+  id                  Int                   @id @default(autoincrement())
+  title               String
+  posts               Post[]
+  feeds               Feed[]
+  userSourceFavorites UserSourceFavorite[]
+  sourceFeedRelations SourceFeedRelations[]
 
   @@map("sources")
 }
 
+model Feed {
+  id                  Int                   @id @default(autoincrement())
+  user                User                  @relation(fields: [userId], references: [id])
+  userId              Int
+  sources             Source[]              @relation(fields: [sourceId], references: [id])
+  sourceId            Int
+  sourceFeedRelations SourceFeedRelations[]
+  isFavorite          Boolean
+
+  @@map("feeds")
+}
+
+model SourceFeedRelations {
+  id       Int    @id @default(autoincrement())
+  source   Source @relation(fields: [sourceId], references: [id])
+  feed     Feed   @relation(fields: [feedId], references: [id])
+  sourceId Int
+  feedId   Int
+}
+
 model UserSourceFavorite {
-  id       Int      @id @default(autoincrement())
-  user     User[]   @relation(fields: [userId], references: [id])
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [userId], references: [id])
   userId   Int
-  source   Source[] @relation(fields: [sourceId], references: [id])
+  source   Source @relation(fields: [sourceId], references: [id])
   sourceId Int
 
   @@map("user_source_favorites")
-}
-
-model Feed {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  source     Source[] @relation(fields: [sourceId], references: [id])
-  sourceId   Int
-  isFavorite Boolean
-
-  @@map("feeds")
 }
 
 model Board {
