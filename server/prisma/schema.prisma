@@ -9,27 +9,104 @@ datasource db {
 }
 
 // This comes with the boilerplate.
+// model User {
+//   id                  String          @id @default(cuid())
+//   createdAt                        DateTime        @default(now())
+//   updatedAt                        DateTime        @updatedAt
+//   email           String  @unique
+//   password      String
+//   role          String
+//   lastLogin     DateTime?
+//   // LL: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
+//   resetPasswordToken String
+//   dateResetPasswordRequest DateTime?
+//   validateEmailToken String
+//   isEmailValidated Boolean
+//   name  String
+// }
+
 model User {
-  id                  String          @id @default(cuid())
-  createdAt                        DateTime        @default(now())
-  updatedAt                        DateTime        @updatedAt
-  email           String  @unique
-  password      String
-  role          String
-  lastLogin     DateTime?  
-  // LL: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
-  resetPasswordToken String
-  dateResetPasswordRequest DateTime?
-  validateEmailToken String
-  isEmailValidated Boolean
-  name  String
+  id                 Int                  @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  email              String               @unique
+  subscription       Subscription         @relation(fields: [subscriptionId], references: [id])
+  subscriptionId     Int
+  feed               Feed[]
+  board              Board[]
+  Post               Post[]
+  UserSourceFavorite UserSourceFavorite[]
+  createdAt          DateTime             @default(now())
+  // setting            Setting
+  Setting            Setting[]
 }
 
-model Feed {
+// user settings like theme
+
+model Setting {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+// integrations
+
+model Subscription {
+  id           Int      @id @default(autoincrement())
+  User         User[]
+  // type         SubscriptionType
+  priceInCents Int
+  description  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SubscriptionType {
+  // FREE
+  // PRO
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  source    Source   @relation(fields: [sourceId], references: [id])
+  sourceId  Int
+  // author    User     @relation(fields: [userId], references: [id])
+  // userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Source {
+  id                 Int                  @id @default(autoincrement())
+  title              String
+  post               Post[]
+  feed               Feed[]
+  UserSourceFavorite UserSourceFavorite[]
 }
 
-model Article {
+model UserSourceFavorite {
+  id       Int      @id @default(autoincrement())
+  user     User[]   @relation(fields: [userId], references: [id])
+  userId   Int
+  source   Source[] @relation(fields: [sourceId], references: [id])
+  sourceId Int
+}
+
+model Feed {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  source     Source[] @relation(fields: [sourceId], references: [id])
+  sourceId   Int
+  isFavorite Boolean
+}
+
+model Board {
+  id         Int     @id @default(autoincrement())
+  user       User    @relation(fields: [userId], references: [id])
+  userId     Int
+  isFavorite Boolean
 }
