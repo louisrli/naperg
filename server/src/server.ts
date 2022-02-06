@@ -4,9 +4,10 @@ import { createContext } from './context'
 import { makeExecutableSchema } from 'graphql-tools'
 import { query } from './typeDefs/query'
 import { user } from './typeDefs/user'
+import { feed } from './typeDefs/feed'
 import { mutation } from './typeDefs/mutation'
 const schema = makeExecutableSchema({
-  typeDefs: [query, user, mutation],
+  typeDefs: [query, user, feed, mutation],
   resolvers,
 })
 
