@@ -44,6 +44,36 @@ export const resolvers = {
       const count = await ctx.prisma.user.count({ where })
       return { users, count, take }
     },
+    userFeeds: (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+      return ctx.prisma.feed.findMany({ where: { userId: userId } })
+    },
+		userArticles: (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+      return ctx.prisma.articlesOnUsers.findMany({ where: { userId: userId } })
+    },
+		userSources: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+			// const feeds = await ctx.prisma.feed.findMany({ where: { userId: userId } })
+			// const feedIds = feeds.map((feed) => feed.title)
+
+      return await ctx.prisma.source.findMany()
+    },
   },
   Mutation: {
     deleteUser: (parent, args, ctx: Context) => {
@@ -63,6 +93,24 @@ export const resolvers = {
           role: me.role === 'ADMIN' ? args.data.role : undefined,
         },
       })
+    },
+
+    createFeed: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+      const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
+      const { title } = args
+
+			if (!user) throw new Error('Not Auth')
+
+      const feed = await ctx.prisma.feed.create({
+        data: {
+          title,
+          user: {
+            connect: {id: userId}
+          }
+        }
+      })
+			return feed
     },
 
     forgetPassword: async (parent, args, ctx: Context) => {
