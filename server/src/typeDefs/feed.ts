@@ -6,8 +6,12 @@ export const feed = gql`
     id: String!
     title: String!
     createdAt: DateTime!
-    user: User!
     userId: String!
-    sources: [Source]
+  }
+
+	type FeedCreateInput {
+    title: String!
+    userId: String!
+		sources: [String!]
   }
 `

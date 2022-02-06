@@ -11,14 +11,7 @@ async function main() {
       role: 'ADMIN',
       resetPasswordToken: '123',
       validateEmailToken: '',
-      isEmailValidated: true,
-      settings: {
-        // id     'qwe',
-        // user  '',
-        userId:   '123',
-        language: 'ru',
-        theme: 'light',
-      }
+      isEmailValidated: true
     },
   })
 

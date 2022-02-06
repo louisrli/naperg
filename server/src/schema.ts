@@ -44,15 +44,15 @@ export const resolvers = {
       const count = await ctx.prisma.user.count({ where })
       return { users, count, take }
     },
-    userFeeds: (parent, args, ctx: Context) => {
-      const userId = utils.getUserId(ctx)
+    // userFeeds: (parent, args, ctx: Context) => {
+    //   const userId = utils.getUserId(ctx)
 
-      if (!userId) {
-        throw new Error('Not loggedin')
-      }
+    //   if (!userId) {
+    //     throw new Error('Not loggedin')
+    //   }
 
-      return ctx.prisma.feed.findMany({ where: { userId: userId } })
-    },
+    //   return ctx.prisma.feed.findMany({ where: { userId: userId } })
+    // },
   },
   Mutation: {
     deleteUser: (parent, args, ctx: Context) => {
@@ -76,14 +76,19 @@ export const resolvers = {
 
     createFeed: async (parent, args, ctx: Context) => {
       const userId = utils.getUserId(ctx)
-      console.log('args: ', args);
+      const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
+			if (!user) throw new Error('Not Auth')
 
-      return ctx.prisma.feed.create({
+      console.log('args: ', args);
+			const { title } = args
+
+      const feed = await ctx.prisma.feed.create({
         data: {
-          ...args.data,
+          title,
           userId,
         }
       })
+			return feed
     },
 
     forgetPassword: async (parent, args, ctx: Context) => {

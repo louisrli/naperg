@@ -8,6 +8,6 @@ export const mutation = gql`
     forgetPassword(email: String!): Boolean!
     resetPassword(password: String!, resetPasswordToken: String!): AuthPayload!
     deleteUser(userId: String!): User!
-    createFeed(title: String!, sources: [Source!]): Feed!
+    createFeed(title: String!): Feed!
   }
 `
