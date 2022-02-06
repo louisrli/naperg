@@ -8,5 +8,7 @@ export const query = gql`
     me: User!
 
     userFeeds: [Feed]
+		userArticles: [Article]
+		userSources: [Source]
   }
 `

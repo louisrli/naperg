@@ -7,7 +7,6 @@ export const feed = gql`
     title: String!
     createdAt: DateTime!
     userId: String!
-	
   }
 
 	type FeedCreateInput {
