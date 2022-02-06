@@ -6,7 +6,7 @@ import utils from './utils';
 import email from './email';
 import { Prisma } from '@prisma/client';
 import config from './config';
-import { AuthenticationError } from 'apollo-server-errors';
+import { AuthenticationError, UserInputError } from 'apollo-server-errors';
 
 export const resolvers = {
   Query: {
@@ -16,6 +16,7 @@ export const resolvers = {
       if (!userId) throw new Error('Bad request');
       return ctx.prisma.user.findUnique({ where: { id: userId } });
     },
+
     // me: (parent, args, ctx: Context) => {
     //   const userId = utils.getUserId(ctx)
     //
@@ -73,8 +74,36 @@ export const resolvers = {
         console.error(error);
         throw new AuthenticationError(error.message || 'Kek');
       }
+    },
+    addSourceToFeed: async (parent, args, ctx: Context) => {
+      const { feedId, sourceId } = args;
+
+      try {
+        const relation = await ctx.prisma.sourceFeedRelation.findFirst({
+          where: {
+            feedId,
+            sourceId
+          }
+        })
+
+        if (!relation) {
+          await ctx.prisma.sourceFeedRelation.create({
+            data: {
+              feedId, sourceId
+            },
+          });
+
+          return {
+            feedId
+          };
+        }
+
+      } catch (error) {
+        console.error(error);
+        throw new UserInputError(error.message || ':(');
+      }
+
     }
-    ,
     // deleteUser: (parent, args, ctx: Context) => {
     //   return ctx.prisma.user.delete({
     //     where: { id: args.userId },
