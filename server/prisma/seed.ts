@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 const prisma = new PrismaClient()
 async function main() {
   await prisma.post.deleteMany()
-  await prisma.sourceFeedRelations.deleteMany()
+  await prisma.sourceFeedRelation.deleteMany()
   await prisma.source.deleteMany()
   await prisma.feed.deleteMany()
   await prisma.user.deleteMany()
@@ -42,11 +42,11 @@ async function main() {
     })
   }
 
-  // sourceFeedRelations
+  // sourceFeedRelation
 
   // у первого фида все 3 сорца
   for (let i = 1; i < 4; i += 1) {
-    await prisma.sourceFeedRelations.create({
+    await prisma.sourceFeedRelation.create({
       data: {
         sourceId: i,
         feedId: 1,
@@ -55,7 +55,7 @@ async function main() {
   }
 
   // у второго фида только второй сорц (1 шт)
-  await prisma.sourceFeedRelations.create({
+  await prisma.sourceFeedRelation.create({
     data: {
       sourceId: 2,
       feedId: 2,
@@ -64,7 +64,7 @@ async function main() {
 
   // у третьего фида НЕТУ сорцов
 
-  //   /sourceFeedRelations
+  //   /sourceFeedRelation
 
   // posts
 

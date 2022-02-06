@@ -40,7 +40,7 @@ CREATE TABLE "posts" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "sourceUrl" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
     "imgUrl" TEXT,
     "sourceId" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -64,12 +64,12 @@ CREATE TABLE "feeds" (
 );
 
 -- CreateTable
-CREATE TABLE "SourceFeedRelations" (
+CREATE TABLE "source_feed_relations" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "sourceId" INTEGER NOT NULL,
     "feedId" INTEGER NOT NULL,
-    CONSTRAINT "SourceFeedRelations_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "sources" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "SourceFeedRelations_feedId_fkey" FOREIGN KEY ("feedId") REFERENCES "feeds" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "source_feed_relations_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "sources" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "source_feed_relations_feedId_fkey" FOREIGN KEY ("feedId") REFERENCES "feeds" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable

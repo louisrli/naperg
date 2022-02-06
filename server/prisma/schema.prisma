@@ -77,34 +77,34 @@ model Post {
 }
 
 model Source {
-  id                  Int                   @id @default(autoincrement())
+  id                  Int                  @id @default(autoincrement())
   title               String
   url                 String
   posts               Post[]
   userSourceFavorites UserSourceFavorite[]
-  sourceFeedRelations SourceFeedRelations[]
+  SourceFeedRelation  SourceFeedRelation[]
 
   @@map("sources")
 }
 
 model Feed {
-  id                  Int                   @id @default(autoincrement())
-  user                User                  @relation(fields: [userId], references: [id])
-  userId              Int
-  sourceFeedRelations SourceFeedRelations[]
-  isFavorite          Boolean
+  id                 Int                  @id @default(autoincrement())
+  user               User                 @relation(fields: [userId], references: [id])
+  userId             Int
+  SourceFeedRelation SourceFeedRelation[]
+  isFavorite         Boolean
 
   @@map("feeds")
 }
 
-model SourceFeedRelations {
+model SourceFeedRelation {
   id       Int    @id @default(autoincrement())
   source   Source @relation(fields: [sourceId], references: [id])
   feed     Feed   @relation(fields: [feedId], references: [id])
   sourceId Int
   feedId   Int
 
-  // @@map("source_feed_relations")
+  @@map("source_feed_relations")
 }
 
 model UserSourceFavorite {
