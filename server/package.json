@@ -2,7 +2,8 @@
   "name": "naperg-server",
   "scripts": {
     "start-watch": "ts-node-dev --no-notify --respawn --transpile-only src/server",
-    "start": "ts-node src/server.ts"
+    "start": "ts-node src/server.ts",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^3.0.2",
@@ -10,6 +11,7 @@
     "bcryptjs": "^2.4.3",
     "crypto": "^1.0.1",
     "graphql": "^15.5.3",
+    "graphql-tools": "^8.2.0",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
