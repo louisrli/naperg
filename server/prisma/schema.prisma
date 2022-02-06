@@ -10,86 +10,87 @@ datasource db {
 
 // This comes with the boilerplate.
 model User {
-  id                  String          @id @default(cuid())
-  createdAt                        DateTime        @default(now())
-  updatedAt                        DateTime        @updatedAt
-  email           String  @unique
-  password      String
-  role          String
-  lastLogin     DateTime?
-  resetPasswordToken String
+  id                       String             @id @default(cuid())
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  email                    String             @unique
+  password                 String
+  role                     String
+  lastLogin                DateTime?
+  resetPasswordToken       String
   dateResetPasswordRequest DateTime?
-  validateEmailToken String
-  isEmailValidated Boolean
-  name  String
-  feeds Feed[]  // one to many
-  articles ArticlesOnUsers[]
+  validateEmailToken       String
+  isEmailValidated         Boolean
+  name                     String
+  feeds                    Feed[] // one to many
+  articles                 ArticlesOnUsers[]
   settings                 Settings?
-  subscriptionPlans SubscriptionPlan[]
+  subscriptionPlans        SubscriptionPlan[]
 }
 
 model Feed {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime? //admin could delete
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
   userId    String
-  sources   Source[]  // one to many
+  sources   Source[] // one to many
 }
 
 model Source {
-  id                  String          @id @default(cuid())
-  createdAt                        DateTime        @default(now())
-  updatedAt                        DateTime        @updatedAt
-  slug String //url
-  title String
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  slug      String //url
+  title     String
   deletedAt DateTime? //admin could delete
-  feed Feed @relation(fields: [feedId], references: [id])
-  feedId String
-  articles          Article[]
+  feed      Feed      @relation(fields: [feedId], references: [id])
+  feedId    String
+  articles  Article[]
 }
 
 model Article {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deletedAt   DateTime? //admin could delete
-  source      Source   @relation(fields: [sourceId], references: [id])
-  sourceId    String
-  author      String?
-  title       String
-  slug        String //url
+  id           String            @id @default(cuid())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  deletedAt    DateTime? //admin could delete
+  source       Source            @relation(fields: [sourceId], references: [id])
+  sourceId     String
+  author       String?
+  title        String
+  slug         String //url
   shortContent String
-  users ArticlesOnUsers[]
+  users        ArticlesOnUsers[]
 }
 
 model ArticlesOnUsers {
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String // relation scalar field (used in the `@relation` attribute above)
-  article   Article @relation(fields: [articleId], references: [id])
-  articleId String // relation scalar field (used in the `@relation` attribute above)
-  isRead      Boolean
-  isFavorite  Boolean
+  user       User    @relation(fields: [userId], references: [id])
+  userId     String // relation scalar field (used in the @relation attribute above)
+  article    Article @relation(fields: [articleId], references: [id])
+  articleId  String // relation scalar field (used in the @relation attribute above)
+  isRead     Boolean @default(false)
+  isFavorite Boolean @default(false)
+  isHidden   Boolean @default(false)
 
   @@id([userId, articleId])
 }
 
 model Settings {
-  id       String    @id @default(cuid())
-  user     User      @relation(fields: [userId], references: [id])
+  id       String @id @default(cuid())
+  user     User   @relation(fields: [userId], references: [id])
   userId   String
-  language String // ru en
-  theme    String // light dark
+  language String @default("RU") // RU EN
+  theme    String @default("LIGHT") // LIGHT DARK
 }
 
 model SubscriptionPlan {
-  id       String    @id @default(cuid())
-  type String // pro pro+ enterprise
-  createdAt DateTime @default(now())
-  expirationDate DateTime
+  id                     String   @id @default(cuid())
+  type                   String   @default("FREE") // FREE PRO PRO+ ENTEPRISE
+  createdAt              DateTime @default(now())
+  expirationDate         DateTime
   originalExpirationDate DateTime
-  user   User @relation(fields: [userId], references: [id])
-  userId String
+  user                   User     @relation(fields: [userId], references: [id])
+  userId                 String
 }
