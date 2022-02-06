@@ -29,26 +29,34 @@ model User {
 }
 
 model Feed {
-  id        String    @id @default(cuid())
+  id        String               @id @default(cuid())
   title     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
   deletedAt DateTime? //admin could delete
-  user      User      @relation(fields: [userId], references: [id])
+  user      User                 @relation(fields: [userId], references: [id])
   userId    String
-  sources   Source[] // one to many
+  sources   SourceFeedRelation[] // one to many
+}
+
+model SourceFeedRelation {
+  feed     Feed   @relation(fields: [feedId], references: [id])
+  feedId   String
+  source   Source @relation(fields: [sourceId], references: [id])
+  sourceId String
+
+  @@id([feedId, sourceId])
 }
 
 model Source {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String               @id @default(cuid())
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
   slug      String //url
   title     String
   deletedAt DateTime? //admin could delete
-  feed      Feed      @relation(fields: [feedId], references: [id])
-  feedId    String
-  articles  Article[]
+  Article   Article[]
+  feeds     SourceFeedRelation[]
 }
 
 model Article {
@@ -80,7 +88,7 @@ model ArticlesOnUsers {
 model Settings {
   id       String @id @default(cuid())
   user     User   @relation(fields: [userId], references: [id])
-  userId   String
+  userId   String @unique
   language String @default("RU") // RU EN
   theme    String @default("LIGHT") // LIGHT DARK
 }

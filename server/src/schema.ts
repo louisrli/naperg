@@ -53,6 +53,27 @@ export const resolvers = {
 
       return ctx.prisma.feed.findMany({ where: { userId: userId } })
     },
+		userArticles: (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+      return ctx.prisma.articlesOnUsers.findMany({ where: { userId: userId } })
+    },
+		userSources: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+			// const feeds = await ctx.prisma.feed.findMany({ where: { userId: userId } })
+			// const feedIds = feeds.map((feed) => feed.title)
+
+      return await ctx.prisma.source.findMany()
+    },
   },
   Mutation: {
     deleteUser: (parent, args, ctx: Context) => {
