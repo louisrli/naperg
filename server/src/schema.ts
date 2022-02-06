@@ -44,15 +44,15 @@ export const resolvers = {
       const count = await ctx.prisma.user.count({ where })
       return { users, count, take }
     },
-    // userFeeds: (parent, args, ctx: Context) => {
-    //   const userId = utils.getUserId(ctx)
+    userFeeds: (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
 
-    //   if (!userId) {
-    //     throw new Error('Not loggedin')
-    //   }
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
 
-    //   return ctx.prisma.feed.findMany({ where: { userId: userId } })
-    // },
+      return ctx.prisma.feed.findMany({ where: { userId: userId } })
+    },
   },
   Mutation: {
     deleteUser: (parent, args, ctx: Context) => {

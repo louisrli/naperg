@@ -7,6 +7,6 @@ export const query = gql`
     user(userId: String!): User!
     me: User!
 
-    userFeed: [Feed]!
+    userFeeds: [Feed]
   }
 `
