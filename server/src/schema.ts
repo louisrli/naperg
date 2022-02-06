@@ -6,6 +6,7 @@ import utils from './utils';
 import email from './email';
 import { Prisma } from '@prisma/client';
 import config from './config';
+import { AuthenticationError } from 'apollo-server-errors';
 
 export const resolvers = {
   Query: {
@@ -52,6 +53,7 @@ export const resolvers = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       try {
+        // @ts-ignore
         const user = await ctx.prisma.user.create({
           data: {
             email,
@@ -68,7 +70,8 @@ export const resolvers = {
           token,
         };
       } catch (error) {
-        throw  new Error(error.message);
+        console.error(error);
+        throw new AuthenticationError(error.message || 'Kek');
       }
     }
     ,
