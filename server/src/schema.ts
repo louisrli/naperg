@@ -77,15 +77,16 @@ export const resolvers = {
     createFeed: async (parent, args, ctx: Context) => {
       const userId = utils.getUserId(ctx)
       const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
-			if (!user) throw new Error('Not Auth')
+      const { title } = args
 
-      console.log('args: ', args);
-			const { title } = args
+			if (!user) throw new Error('Not Auth')
 
       const feed = await ctx.prisma.feed.create({
         data: {
           title,
-          userId,
+          user: {
+            connect: {id: userId}
+          }
         }
       })
 			return feed
