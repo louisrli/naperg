@@ -2,9 +2,11 @@
   "name": "naperg-server",
   "scripts": {
     "start-watch": "ts-node-dev --no-notify --respawn --transpile-only src/server",
-    "start": "ts-node src/server.ts"
+    "start": "ts-node src/server.ts",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "@prisma/client": "^3.0.2",
     "apollo-server": "^3.3.0",
     "bcryptjs": "^2.4.3",
