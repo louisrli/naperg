@@ -8,10 +8,20 @@ export const user = gql`
     name: String
     role: Role
     lastLogin: DateTime
+    lang: Lang!
+    theme: Theme!
   }
   enum Role {
     ADMIN
     USER
+  }
+  enum Theme {
+    LIGHT
+    DARK
+  }
+  enum Lang {
+    RU
+    EN
   }
 
   input UserWhereInput {

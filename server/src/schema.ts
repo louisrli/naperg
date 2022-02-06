@@ -44,6 +44,15 @@ export const resolvers = {
       const count = await ctx.prisma.user.count({ where })
       return { users, count, take }
     },
+    userFeeds: (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+
+      if (!userId) {
+        throw new Error('Not loggedin')
+      }
+
+      return ctx.prisma.feed.findMany({ where: { userId: userId } })
+    },
   },
   Mutation: {
     deleteUser: (parent, args, ctx: Context) => {
@@ -62,6 +71,18 @@ export const resolvers = {
           name: args.data.name,
           role: me.role === 'ADMIN' ? args.data.role : undefined,
         },
+      })
+    },
+
+    createFeed: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+      console.log('args: ', args);
+
+      return ctx.prisma.feed.create({
+        data: {
+          ...args.data,
+          userId,
+        }
       })
     },
 
