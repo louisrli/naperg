@@ -15,6 +15,7 @@ async function main() {
       id: 5,
       fullName: 'Ivan Ivanov',
       email: faker.internet.email(),
+      password: faker.internet.password(),
     },
   })
   console.log({ user })
