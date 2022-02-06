@@ -1,8 +1,7 @@
 -- CreateTable
 CREATE TABLE "users" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,15 +45,14 @@ CREATE TABLE "posts" (
     "sourceId" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "userId" INTEGER,
-    CONSTRAINT "posts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "posts_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "sources" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "sources" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "title" TEXT NOT NULL
+    "title" TEXT NOT NULL,
+    "url" TEXT NOT NULL
 );
 
 -- CreateTable
