@@ -9,15 +9,15 @@ datasource db {
 }
 
 model User {
-  id                        Int                         @id @default(autoincrement())
-  fullName                  String
-  email                     String                      @unique
+  id                         Int                         @id @default(autoincrement())
+  fullName                   String
+  email                      String                      @unique
   feeds                      Feed[]
   boards                     Board[]
   userSourceFavorites        UserSourceFavorite[]
   userActivatedSubscriptions UserActivatedSubscription[]
-  createdAt                 DateTime                    @default(now())
-  setting                   Setting?
+  createdAt                  DateTime                    @default(now())
+  setting                    Setting?
 
   @@map("users")
 }
@@ -66,7 +66,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
-  sourceUrl String
+  url       String
   imgUrl    String?
   source    Source   @relation(fields: [sourceId], references: [id])
   sourceId  Int
@@ -103,6 +103,8 @@ model SourceFeedRelations {
   feed     Feed   @relation(fields: [feedId], references: [id])
   sourceId Int
   feedId   Int
+
+  // @@map("source_feed_relations")
 }
 
 model UserSourceFavorite {
