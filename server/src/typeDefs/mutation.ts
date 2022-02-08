@@ -9,5 +9,6 @@ export const mutation = gql`
     resetPassword(password: String!, resetPasswordToken: String!): AuthPayload!
     deleteUser(userId: String!): User!
     createFeed(title: String!): Feed!
+		addSourceToFeed(sourceId: String, feedId: String): SourceFeedRelation!
   }
 `

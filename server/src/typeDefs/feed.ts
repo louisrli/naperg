@@ -14,4 +14,9 @@ export const feed = gql`
     userId: String!
 		sources: [String!]
   }
+
+	type SourceFeedRelation {
+		sourceId: String!
+		feedId: String!
+	}
 `

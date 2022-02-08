@@ -53,6 +53,24 @@ export const resolvers = {
 
       return ctx.prisma.feed.findMany({ where: { userId: userId } })
     },
+		feedSources: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+      if (!userId) {
+				throw new Error('Not loggedin')
+      }
+			
+			const { feedId } = args
+			const relations = await ctx.prisma.sourceFeedRelation.findMany({
+				where: {
+					feedId: feedId
+				},
+				include: {
+					source: true
+				}
+			})
+
+      return relations.map((sources) => sources.source)
+    },
 		userArticles: (parent, args, ctx: Context) => {
       const userId = utils.getUserId(ctx)
 
@@ -111,6 +129,30 @@ export const resolvers = {
         }
       })
 			return feed
+    },
+		addSourceToFeed: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+			if (!userId) throw new Error('Not Auth')
+      const { sourceId, feedId } = args
+      const feed = await ctx.prisma.feed.findUnique({ where: { id: feedId }})
+			console.log(feed, 'feed')
+			if (feed?.userId !== userId) throw new Error("Feed does not belong to user");
+			
+      const relation = await ctx.prisma.sourceFeedRelation.create({
+				data: {
+					source: {
+						connect: {
+							id: sourceId
+						}
+					},
+					feed: {
+						connect: {
+							id: feedId
+						}
+					}
+				}
+			})
+			return relation
     },
 
     forgetPassword: async (parent, args, ctx: Context) => {
