@@ -14,19 +14,14 @@ async function main() {
       isEmailValidated: true
     },
   })
-	// for (let i  = 0; i < 10; i++) {
-	// 	await prisma.source.create({
-	// 		data: {
-	// 			slug: `asldaklda${i}`,
-	// 			title: `asdnmsd${i}`,
-	// 			feed: {
-	// 				connect: {
-	// 					id: 'ckzb8ee4q0003p30s8t2pqd7v'
-	// 				}
-	// 			}
-	// 		}
-	// 	})
-	// }
+	for (let i  = 0; i < 10; i++) {
+		await prisma.source.create({
+			data: {
+				slug: `asldaklda${i}`,
+				title: `asdnmsd${i}`,
+			}
+		})
+	}
 }
 
 main()

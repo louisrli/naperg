@@ -10,5 +10,6 @@ export const mutation = gql`
     deleteUser(userId: String!): User!
     createFeed(title: String!): Feed!
     createSubscriptionPlan(type: String!): SubscriptionPlan!
+		addSourceToFeed(sourceId: String, feedId: String): SourceFeedRelation!
   }
 `

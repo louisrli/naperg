@@ -10,6 +10,7 @@ export const query = gql`
     userFeeds: [Feed]
 		userArticles: [Article]
 		userSources: [Source]
+		feedSources(feedId: String!): [Source]
 
     subscriptionPlans: [AvailableSubscriptionPlan]!
   }
