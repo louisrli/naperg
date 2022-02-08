@@ -10,6 +10,7 @@ export const user = gql`
     lastLogin: DateTime
     lang: Lang!
     theme: Theme!
+    subscriptionPlans: [SubscriptionPlan]
   }
   enum Role {
     ADMIN
