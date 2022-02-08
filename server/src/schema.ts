@@ -6,6 +6,7 @@ import utils from './utils'
 import email from './email'
 import { Prisma } from '@prisma/client'
 import config from './config'
+import { AVAILABLE_SUBSCRIPTION_PLANS } from './constants'
 
 export const resolvers = {
   Query: {
@@ -58,7 +59,7 @@ export const resolvers = {
       if (!userId) {
 				throw new Error('Not loggedin')
       }
-			
+
 			const { feedId } = args
 			const relations = await ctx.prisma.sourceFeedRelation.findMany({
 				where: {
@@ -80,17 +81,21 @@ export const resolvers = {
 
       return ctx.prisma.articlesOnUsers.findMany({ where: { userId: userId } })
     },
-		userSources: async (parent, args, ctx: Context) => {
+    userSources: async (parent, args, ctx: Context) => {
       const userId = utils.getUserId(ctx)
 
       if (!userId) {
         throw new Error('Not loggedin')
       }
 
-			// const feeds = await ctx.prisma.feed.findMany({ where: { userId: userId } })
-			// const feedIds = feeds.map((feed) => feed.title)
+      // const feeds = await ctx.prisma.feed.findMany({ where: { userId: userId } })
+      // const feedIds = feeds.map((feed) => feed.title)
 
       return await ctx.prisma.source.findMany()
+    },
+
+    subscriptionPlans: () => {
+      return AVAILABLE_SUBSCRIPTION_PLANS
     },
   },
   Mutation: {
@@ -118,17 +123,40 @@ export const resolvers = {
       const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
       const { title } = args
 
-			if (!user) throw new Error('Not Auth')
+      if (!user) throw new Error('Not Auth')
 
       const feed = await ctx.prisma.feed.create({
         data: {
           title,
           user: {
-            connect: {id: userId}
-          }
-        }
+            connect: { id: userId },
+          },
+        },
       })
-			return feed
+      return feed
+    },
+
+    createSubscriptionPlan: async (parent, args, ctx: Context) => {
+      const userId = utils.getUserId(ctx)
+      const user = await ctx.prisma.user.findUnique({ where: { id: userId } })
+      const { type } = args
+
+      if (!user) throw new Error('Not Auth')
+
+      // Create date, increase on one month and converse to ISO format for DB.
+      const expirationDate = utils.defineExpirationDate(Date.now())
+
+      const subscriptionPlan = await ctx.prisma.subscriptionPlan.create({
+        data: {
+          type,
+          expirationDate: expirationDate,
+          originalExpirationDate: expirationDate,
+          user: {
+            connect: { id: userId },
+          },
+        },
+      })
+      return subscriptionPlan
     },
 		addSourceToFeed: async (parent, args, ctx: Context) => {
       const userId = utils.getUserId(ctx)
@@ -137,7 +165,7 @@ export const resolvers = {
       const feed = await ctx.prisma.feed.findUnique({ where: { id: feedId }})
 			console.log(feed, 'feed')
 			if (feed?.userId !== userId) throw new Error("Feed does not belong to user");
-			
+
       const relation = await ctx.prisma.sourceFeedRelation.create({
 				data: {
 					source: {
@@ -270,7 +298,9 @@ export const resolvers = {
           id: user.id,
         },
       })
+
       const valid = await bcrypt.compare(args.password, user.password)
+
       if (!valid) {
         throw new Error('Invalid password')
       }

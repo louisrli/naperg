@@ -9,9 +9,19 @@ import { article } from './typeDefs/article'
 import { articlesForUser } from './typeDefs/articleForUser'
 import { source } from './typeDefs/source'
 import { mutation } from './typeDefs/mutation'
+import { subscriptionPlan } from './typeDefs/subscriptionPlan'
 
 const schema = makeExecutableSchema({
-  typeDefs: [query, user, feed, article, articlesForUser, source, mutation],
+  typeDefs: [
+    query,
+    user,
+    feed,
+    article,
+    articlesForUser,
+    source,
+    mutation,
+    subscriptionPlan,
+  ],
   resolvers,
 })
 

@@ -38,6 +38,10 @@ const utils = {
     return false
   },
 
+  defineExpirationDate(oldDate: number) {
+    return new Date(oldDate + 60 * 60 * 24 * 30 * 1000).toISOString()
+  },
+
   isPasswordSafe: (password: string) => {
     if (
       // utils.isPasswordLongEnough(password) &&

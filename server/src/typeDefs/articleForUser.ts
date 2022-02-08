@@ -6,6 +6,6 @@ export const articlesForUser = gql`
 		articleId:  String!
 		isRead:     Boolean!
 		isFavorite: Boolean!
-		isHidden:   Boolean!
+		isHidden:   Boolean
   }
 `
