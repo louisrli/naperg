@@ -96,3 +96,18 @@ This is only if you have extra time. Implement the following somehow.
 1. How would you support something like "Integrations" on the Feedly settings page?
 2. How would you reset a user's account?
 3. How would you upgrade an existing user from a free tier to paid tier?
+
+# Presentation Instructions
+Rather than doing a free-form presentation, please follow the format below for the presentation. If things get too unorganized, I will stop you. The goal here is to communicate the main ideas clearly and succintly, which is actually a very important skill as a programmer! The total time allocated will be 15 minutes.
+
+## Part 0: Demo
+* Show us the most interesting part of your model.
+* Show us the most interesting endpoint of your API.
+
+## Part 1: Process recap
+* How did you test whether your API was working?
+* Discuss and show three things that were difficult for your team. Each person speaks: that is, every person will present one thing that was difficult (personally or for the team as a whole). Please plan ahead of time who will talk about what.
+* Was there anything that you had to change after you started coding? If so, what?
+
+## Part 2: Questions
+* Remaining time: questions from me
