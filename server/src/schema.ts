@@ -6,6 +6,7 @@ import utils from './utils'
 import email from './email'
 import { Prisma } from '@prisma/client'
 import config from './config'
+import { rssMutationResolvers } from './resolvers/rss'
 
 export const resolvers = {
   Query: {
@@ -46,6 +47,7 @@ export const resolvers = {
     },
   },
   Mutation: {
+    ...rssMutationResolvers,
     deleteUser: (parent, args, ctx: Context) => {
       return ctx.prisma.user.delete({
         where: { id: args.userId },
