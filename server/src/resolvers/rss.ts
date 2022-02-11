@@ -40,7 +40,8 @@ export const rssMutationResolvers = {
     }
 
     // TODO: How do you test this resolver? What gets mocked? You don't need to
-    // actually write the tests, but think about how you would do this.
+    // actually write the tests, but think about how you would do this. Write
+    // your response below.
   },
 };
 
