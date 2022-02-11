@@ -25,11 +25,37 @@ model User {
   name  String
 }
 
+// A user-created Feed. A feed can be a collection of sources, typically RSS
+// feeds (the terminology should not to be confused, since "feed" has two
+// meanings in this context.)
 model Feed {
+  id                  String          @id @default(cuid())
+  createdAt                        DateTime        @default(now())
+  updatedAt                        DateTime        @updatedAt
+  url String
+  owner User
+  ownerId String
+  sources Source[]
 }
 
+// A single source that should be updated.
 model Source {
+  id                  String          @id @default(cuid())
+  name String
+  rssFeedUrl String
+  createdAt                        DateTime        @default(now())
+  updatedAt                        DateTime        @updatedAt
+  feeds Feed[]
 }
 
 model Article {
+  id                  String          @id @default(cuid())
+  createdAt                        DateTime        @default(now())
+  updatedAt                        DateTime        @updatedAt
+  title String
+  content String
+  author String?
+  feed Feed
+  feedId String
 }
+
