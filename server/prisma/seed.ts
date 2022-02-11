@@ -15,6 +15,8 @@ async function main() {
     },
   })
 
+  // TODO: Insert some sources here.
+
   console.log({ user })
 }
 main()
