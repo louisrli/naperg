@@ -23,14 +23,14 @@ export const rssMutationResolvers = {
   refreshFeeds: async (parent, args, ctx: Context) => {
     // TODO: Using Prisma, query for all sources. Filter only for stale sources,
     // either using Prisma filters or using code.
-    const staleSources = [];
+    const staleSources : Source[] = [];
 
     for (let i = 0; i < staleSources.length; i++) {
       // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
       // https://www.google.com/search?q=rss+feed+parser+node
       // You may need to change this code depending on your approach for
       // handling asynchronicity.
-      const parsedResult = parseRssFeed(staleSources[i].rssFeedUrl);
+      const parsedResult = parseRssFeed(staleSources[i]);
 
       // TODO: For each article in parsed result, update or insert the
       // corresponding article. You may need to change your schema here: how do
