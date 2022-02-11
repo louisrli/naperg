@@ -26,6 +26,8 @@ Ask yourself the following questions:
   above them?
 * What can you do to get in the habit of writing such comments?
 
+Check any TODOs in the `typeDefs/` folder carefully.
+
 ## Step 3. Write the script.
 There instructions here will be brief, because there is a substantial amount of
 pseudocode inside `script/puller.ts`. Please read the pseudocode carefully.

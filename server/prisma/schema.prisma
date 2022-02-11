@@ -45,6 +45,9 @@ model Source {
   rssFeedUrl String
   createdAt                        DateTime        @default(now())
   updatedAt                        DateTime        @updatedAt
+  // Not to be confused with updatedAt. updatedAt is when it was changed in the
+  // database, and is handled by Prisma.
+  lastRefreshedAt DateTime
   feeds Feed[]
 }
 

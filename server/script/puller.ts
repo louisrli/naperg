@@ -10,16 +10,27 @@
  *
  * Of course, in this case, this script happens to be in the same repository as
  * the Prisma things, but that's only for convenience of delivering the code to
- * you.
+ * you in this case.
  *
  * For further reference, see "architecture 0" on the lecture slides.
  */
 
-
 async function main() {
-  // Retrieve the sources from 
+  // TODO: Use a GraphQL client or a simple `fetch` to call the endpoint to
+  // refresh all feeds with the appropriate arguments.
+
 }
 
+// TODO: Last time, people seemed confused about where the "scheduling"
+// happens. It does not happen in the code. This script does not know when it's
+// called, it just knows how to trigger an endpoint.
+//
+// Answer the following questions (you don't need to actually do these),
+// Googling the answer and writing it in your own words.
+//
+// 1. When you use cron, what file do you change in order set up a cron job?
+// 2. What would be the cron line you would add to run this script once a day?
+// 3. And what about for once every 10 minutes?
 main()
   .catch((e) => {
     console.error(e)
