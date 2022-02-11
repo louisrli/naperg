@@ -31,9 +31,36 @@ export const rssMutationResolvers = {
       // handling asynchronicity.
       const parsedResult = parseRssFeed(staleSources[i].rssFeedUrl);
 
+      // TODO: For each article in parsed result, update or insert the
+      // corresponding article. You may need to change your schema here: how do
+      // you "deduplicate" articles?
 
+      // TODO: Make sure that somewhere, somehow, the lastRefreshedAt time for
+      // the source is correct.
     }
+
+    // TODO: How do you test this resolver? What gets mocked? You don't need to
+    // actually write the tests, but think about how you would do this.
   },
 };
 
-const parseRssFeed
+/**
+ * A type used only internally in this file for parsing an article from an RSS
+ * feed.
+ */
+interface ParsedArticle {
+  // TODO: Specify your custom type.
+}
+
+/**
+ * Returns a **list** of objects representing articles for the given RSS feed.
+ *
+ * Optional: You may want this to take "SOURCE_STALENESS_MINUTES" too, so you
+ * can filter out articles that don't need to be refreshed. Think about how you
+ * might be adding duplicate articles on accident.
+ */
+const parseRssFeed = async (source: Source): Promise<ParsedArticle[]> => {
+  // TODO: Use the RSS parser here. This has been separated into its own
+  // function for cleanliness.
+  return [];
+};
