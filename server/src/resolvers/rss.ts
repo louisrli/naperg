@@ -6,6 +6,7 @@
  * app is.
  */
 import { Context } from "../model/appInterface";
+import { Source } from '@prisma/client'
 
 // This is the number, in minutes, before a source is considered "stale" and
 // needs to be refreshed. That is, if a source has not been refreshed in the last
