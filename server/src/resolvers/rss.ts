@@ -22,62 +22,61 @@ import { Context } from '../model/appInterface';
 const SOURCE_STALENESS_MINUTES = 10;
 
 export const rssMutationResolvers = {
-    refreshFeeds: async (parent, args, ctx: Context) => {
-      // TODO: Using Prisma, query for all sources. Filter only for stale sources,
-      // either using Prisma filters or using code.
-      const staleSources: Source[] = await ctx.prisma.source.findMany();
+  refreshFeeds: async (parent, args, ctx: Context) => {
+    // TODO: Using Prisma, query for all sources. Filter only for stale sources,
+    // either using Prisma filters or using code.
+    const staleSources: Source[] = await ctx.prisma.source.findMany();
 
-      for (const source of staleSources) {
-        // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
-        // https://www.google.com/search?q=rss+feed+parser+node
-        // You may need to change this code depending on your approach for
-        // handling asynchronicity.
-        try {
-          const parsedResults = await parseRssFeed(source.url);
-          for (const parsedResult of parsedResults) {
-            // @ts-ignore
-            const { title, link: url, content, description } = parsedResult;
-            // Raw SQL stuff in future PRs we made awesome code
-            // @ts-ignore
-            const post = await ctx.prisma.post.findFirst({ url });
-            if (!post) {
-              await ctx.prisma.post.create({
-                data: {
-                  title,
-                  url,
-                  content: content || description,
-                  sourceId: source.id,
-                },
-              });
-            }
-            // in future PRs we gonna use it snippet stuff
-            // await ctx.prisma.post.upsert({
-            //   // @ts-ignore
-            //   where: { title },
-            //   update: {},
-            //   // @ts-ignore
-            //   create: { title, url, content: content || description, sourceId: source.id },
-            // });
+    for (const source of staleSources) {
+      // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
+      // https://www.google.com/search?q=rss+feed+parser+node
+      // You may need to change this code depending on your approach for
+      // handling asynchronicity.
+      try {
+        const parsedResults = await parseRssFeed(source.url);
+        for (const parsedResult of parsedResults) {
+          // @ts-ignore
+          const { title, link: url, content, description } = parsedResult;
+          // Raw SQL stuff in future PRs we made awesome code
+          // @ts-ignore
+          const post = await ctx.prisma.post.findFirst({ url });
+          if (!post) {
+            await ctx.prisma.post.create({
+              data: {
+                title,
+                url,
+                content: content || description,
+                sourceId: source.id,
+              },
+            });
           }
-        } catch (e) {
-          console.error(e);
-          return false;
+          // in future PRs we gonna use it snippet stuff
+          // await ctx.prisma.post.upsert({
+          //   // @ts-ignore
+          //   where: { title },
+          //   update: {},
+          //   // @ts-ignore
+          //   create: { title, url, content: content || description, sourceId: source.id },
+          // });
         }
-        // TODO: For each article in parsed result, update or insert the
-        // corresponding article. You may need to change your schema here: how do
-        // you "deduplicate" articles?
-
-        // TODO: Make sure that somewhere, somehow, the lastRefreshedAt time for
-        // the source is correct.
+      } catch (e) {
+        console.error(e);
+        return false;
       }
-      return true;
-      // TODO: How do you test this resolver? What gets mocked? You don't need to
-      // actually write the tests, but think about how you would do this. Write
-      // your response below.
+      // TODO: For each article in parsed result, update or insert the
+      // corresponding article. You may need to change your schema here: how do
+      // you "deduplicate" articles?
+
+      // TODO: Make sure that somewhere, somehow, the lastRefreshedAt time for
+      // the source is correct.
     }
-    ,
+    return true;
+    // TODO: How do you test this resolver? What gets mocked? You don't need to
+    // actually write the tests, but think about how you would do this. Write
+    // your response below.
   }
-;
+  ,
+};
 
 /**
  * A type used only internally in this file for parsing an article from an RSS
