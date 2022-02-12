@@ -18,6 +18,9 @@ async function main() {
       password: faker.internet.password(),
     },
   })
+
+  // TODO: Insert some sources here.
+
   console.log({ user })
 
   // создаю фиды

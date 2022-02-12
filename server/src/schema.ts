@@ -7,6 +7,7 @@ import email from './email'
 import { Prisma } from '@prisma/client'
 import config from './config'
 import { AuthenticationError, UserInputError } from 'apollo-server-errors'
+import { rssMutationResolvers } from './resolvers/rss'
 
 export const resolvers = {
   Query: {
