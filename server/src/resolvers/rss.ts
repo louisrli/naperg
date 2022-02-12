@@ -5,8 +5,10 @@
  * files. Note that there are many ways to do this, depending on how large your
  * app is.
  */
-import { Context } from "../model/appInterface";
-import { Source } from '@prisma/client'
+import { Source } from '@prisma/client';
+import * as Parser from 'rss-parser';
+import { Context } from '../model/appInterface';
+
 
 // This is the number, in minutes, before a source is considered "stale" and
 // needs to be refreshed. That is, if a source has not been refreshed in the last
@@ -20,31 +22,62 @@ import { Source } from '@prisma/client'
 const SOURCE_STALENESS_MINUTES = 10;
 
 export const rssMutationResolvers = {
-  refreshFeeds: async (parent, args, ctx: Context) => {
-    // TODO: Using Prisma, query for all sources. Filter only for stale sources,
-    // either using Prisma filters or using code.
-    const staleSources : Source[] = [];
+    refreshFeeds: async (parent, args, ctx: Context) => {
+      // TODO: Using Prisma, query for all sources. Filter only for stale sources,
+      // either using Prisma filters or using code.
+      const staleSources: Source[] = await ctx.prisma.source.findMany();
 
-    for (let i = 0; i < staleSources.length; i++) {
-      // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
-      // https://www.google.com/search?q=rss+feed+parser+node
-      // You may need to change this code depending on your approach for
-      // handling asynchronicity.
-      const parsedResult = parseRssFeed(staleSources[i]);
+      for (const source of staleSources) {
+        // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
+        // https://www.google.com/search?q=rss+feed+parser+node
+        // You may need to change this code depending on your approach for
+        // handling asynchronicity.
+        try {
+          const parsedResults = await parseRssFeed(source.url);
+          for (const parsedResult of parsedResults) {
+            // @ts-ignore
+            const { title, link: url, content, description } = parsedResult;
+            // Raw SQL stuff in future PRs we made awesome code
+            // @ts-ignore
+            const post = await ctx.prisma.post.findFirst({ url });
+            if (!post) {
+              await ctx.prisma.post.create({
+                data: {
+                  title,
+                  url,
+                  content: content || description,
+                  sourceId: source.id,
+                },
+              });
+            }
+            // in future PRs we gonna use it snippet stuff
+            // await ctx.prisma.post.upsert({
+            //   // @ts-ignore
+            //   where: { title },
+            //   update: {},
+            //   // @ts-ignore
+            //   create: { title, url, content: content || description, sourceId: source.id },
+            // });
+          }
+        } catch (e) {
+          console.error(e);
+          return false;
+        }
+        // TODO: For each article in parsed result, update or insert the
+        // corresponding article. You may need to change your schema here: how do
+        // you "deduplicate" articles?
 
-      // TODO: For each article in parsed result, update or insert the
-      // corresponding article. You may need to change your schema here: how do
-      // you "deduplicate" articles?
-
-      // TODO: Make sure that somewhere, somehow, the lastRefreshedAt time for
-      // the source is correct.
+        // TODO: Make sure that somewhere, somehow, the lastRefreshedAt time for
+        // the source is correct.
+      }
+      return true;
+      // TODO: How do you test this resolver? What gets mocked? You don't need to
+      // actually write the tests, but think about how you would do this. Write
+      // your response below.
     }
-
-    // TODO: How do you test this resolver? What gets mocked? You don't need to
-    // actually write the tests, but think about how you would do this. Write
-    // your response below.
-  },
-};
+    ,
+  }
+;
 
 /**
  * A type used only internally in this file for parsing an article from an RSS
@@ -61,8 +94,11 @@ interface ParsedArticle {
  * can filter out articles that don't need to be refreshed. Think about how you
  * might be adding duplicate articles on accident.
  */
-const parseRssFeed = async (source: Source): Promise<ParsedArticle[]> => {
+const parseRssFeed = async (url: string): Promise<ParsedArticle[]> => {
   // TODO: Use the RSS parser here. This has been separated into its own
   // function for cleanliness.
-  return [];
+
+  const parser: Parser<any, any> = new Parser({ xml2js: true });
+  const feeds = await parser.parseURL(url);
+  return feeds.items;
 };
