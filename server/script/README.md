@@ -32,6 +32,17 @@ Ask yourself the following questions:
 
 Check any TODOs in the `typeDefs/` folder carefully.
 
+## Step 4. Make a frontend
+Create a very basic React frontend. It's not important how it looks, but it
+should do the following:
+* **Source list page**. Query an endpoint to get a list of sources. You need to create a new endpoint
+    for this. 
+* **Source detail page**. When a user clicks on the source, it refreshes the source in the backend and
+    then shows a list of articles. 
+* **Article page**. Show the contents of an article after the user clicks on an
+    article.
+
+For a first version, you can ignore handling logged in users.
 ## Bonus section
 * **Pagination**: Add pagination to the API and the part of the script that retrieves the
     sources. In a real app, you probably have too many sources to simply
