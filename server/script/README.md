@@ -17,7 +17,11 @@ Seed some sources according to the Prisma schema. You are all familiar with
 Please add at least five sources. Please do not do this manually (i.e., insert
 rows in the database using an admin tool); use the seed script.
 
-## Step 2. Read the new GraphQL API
+## Step 2. Write the script.
+There instructions here will be brief, because there is a substantial amount of
+pseudocode inside `script/puller.ts`. Please read the pseudocode carefully.
+
+## Step 3. Read and implement the new GraphQL API
 Familiarize yourself with the GraphQL API that I have written for you with
 comments.
 
@@ -27,10 +31,6 @@ Ask yourself the following questions:
 * What can you do to get in the habit of writing such comments?
 
 Check any TODOs in the `typeDefs/` folder carefully.
-
-## Step 3. Write the script.
-There instructions here will be brief, because there is a substantial amount of
-pseudocode inside `script/puller.ts`. Please read the pseudocode carefully.
 
 ## Bonus section
 * **Pagination**: Add pagination to the API and the part of the script that retrieves the
