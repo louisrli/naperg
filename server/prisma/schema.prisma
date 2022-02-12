@@ -51,6 +51,7 @@ model Source {
   // database, and is handled by Prisma.
   lastRefreshedAt DateTime?
   feeds           Feed[]
+  articles        Article[]
 }
 
 model Article {
@@ -61,6 +62,6 @@ model Article {
   url       String
   content   String
   author    String?
-  feed      Feed     @relation(fields: [feedId], references: [id])
-  feedId    String
+  source      Source     @relation(fields: [sourceId], references: [id])
+  sourceId    String
 }
