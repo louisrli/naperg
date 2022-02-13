@@ -1,28 +1,29 @@
-import { Context } from './model/appInterface'
-import * as jwt from 'jsonwebtoken'
-import * as bcrypt from 'bcryptjs'
-import * as crypto from 'crypto'
-import utils from './utils'
-import email from './email'
-import { Prisma } from '@prisma/client'
-import config from './config'
-import { AuthenticationError, UserInputError } from 'apollo-server-errors'
+import { Context } from './model/appInterface';
+import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+import utils from './utils';
+import email from './email';
+import { Prisma } from '@prisma/client';
+import config from './config';
+import { AuthenticationError, UserInputError } from 'apollo-server-errors';
+import { rssMutationResolvers } from './resolvers/rss';
 
 export const resolvers = {
   Query: {
     getUser: (parent, args, ctx: Context) => {
-      const { userId } = args
+      const { userId } = args;
 
-      if (!userId) throw new Error('Bad request')
-      return ctx.prisma.user.findUnique({ where: { id: userId } })
+      if (!userId) throw new Error('Bad request');
+      return ctx.prisma.user.findUnique({ where: { id: userId } });
     },
     getUserSettings: (parent, args, ctx: Context) => {
       // just for now
       // in future get userId from session
-      const { userId } = args
+      const { userId } = args;
 
-      if (!userId) throw new Error('Bad request')
-      return ctx.prisma.setting.findUnique({ where: { userId } })
+      if (!userId) throw new Error('Bad request');
+      return ctx.prisma.setting.findUnique({ where: { userId } });
     },
 
     // me: (parent, args, ctx: Context) => {
@@ -58,8 +59,8 @@ export const resolvers = {
   },
   Mutation: {
     signupUser: async (parent, args, ctx: Context) => {
-      const { email, password } = args
-      const hashedPassword = await bcrypt.hash(password, 10)
+      const { email, password } = args;
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       try {
         // @ts-ignore
@@ -68,23 +69,23 @@ export const resolvers = {
             email,
             password: hashedPassword,
           },
-        })
+        });
         const payload = {
           userId: user.id,
           userEmail: user.email,
-        }
-        const token = jwt.sign(payload, config.APP_SECRET, { expiresIn: '2d' })
+        };
+        const token = jwt.sign(payload, config.APP_SECRET, { expiresIn: '2d' });
         return {
           user,
           token,
-        }
+        };
       } catch (error) {
-        console.error(error)
-        throw new AuthenticationError(error.message || 'Kek')
+        console.error(error);
+        throw new AuthenticationError(error.message || 'Kek');
       }
     },
     addSourceToFeed: async (parent, args, ctx: Context) => {
-      const { feedId, sourceId } = args
+      const { feedId, sourceId } = args;
 
       try {
         const relation = await ctx.prisma.sourceFeedRelation.findFirst({
@@ -92,7 +93,7 @@ export const resolvers = {
             feedId,
             sourceId,
           },
-        })
+        });
 
         if (!relation) {
           await ctx.prisma.sourceFeedRelation.create({
@@ -100,30 +101,30 @@ export const resolvers = {
               feedId,
               sourceId,
             },
-          })
+          });
 
           return {
             feedId,
-          }
+          };
         }
       } catch (error) {
-        console.error(error)
-        throw new UserInputError(error.message || ':(')
+        console.error(error);
+        throw new UserInputError(error.message || ':(');
       }
     },
 
     updateUserSettings: async (parent, args, ctx: Context) => {
-      const { userId, theme } = args
+      const { userId, theme } = args;
 
       try {
         const setting = await ctx.prisma.setting.findFirst({
           where: {
             userId,
           },
-        })
+        });
 
         if (!setting) {
-          throw new UserInputError('Setting not found')
+          throw new UserInputError('Setting not found');
         }
 
         const newSetting = await ctx.prisma.setting.update({
@@ -133,14 +134,15 @@ export const resolvers = {
           data: {
             ...(theme && { theme }),
           },
-        })
+        });
 
-        return newSetting
+        return newSetting;
       } catch (error) {
-        console.error(error)
-        throw new UserInputError(error.message || ':(')
+        console.error(error);
+        throw new UserInputError(error.message || ':(');
       }
     },
+    ...rssMutationResolvers,
     // deleteUser: (parent, args, ctx: Context) => {
     //   return ctx.prisma.user.delete({
     //     where: { id: args.userId },
@@ -287,4 +289,4 @@ export const resolvers = {
     //   }
     // },
   },
-}
+};
