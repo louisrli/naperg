@@ -4,6 +4,6 @@ export const source = gql`
     type Source {
         id: ID!,
         title: String,
-        url: String
+        url: String,
     }
 `;
