@@ -50,3 +50,26 @@ For a first version, you can ignore handling logged in users.
 * **Rate limiting**: Add
     [throttling](https://www.google.com/search?q=throttle+for+loop+node)
     somehow, again to prevent too many writes per second to the database.
+
+# Presentation
+Please use this as a guideline for the presentation.
+
+## Demo
+10 minutes. Please show the following:
+
+* Your frontend, if it exists.
+* Any API endpoints you added (e.g., for frontend) or any changes to the API
+    (e.g., for pagination).
+* One piece of code (it can be a line, function, etc.) that was difficult to get working.
+* One piece of code that you thought was interesting.
+
+Please **try to avoid simply walking through code** in an unstructured manner.
+
+## Reflection
+5 minutes.
+
+Each person answer the following questions: 
+* What was one thing that was more difficult than you thought it would be?
+* If you could go back, what is one thing you would do differently?
+
+
