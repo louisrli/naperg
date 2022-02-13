@@ -23,17 +23,20 @@ async function main() {
   // refresh all feeds with the appropriate arguments.
 
   // */10 every 10 seconds
-  scheduleJob('1 * * * *', async () => {
+  scheduleJob('* * * * *', async () => {
     const query = gql`
-         mutation Mutation {
-             refreshFeeds
-         }
-     `;
+        mutation Mutation {
+            refreshFeeds
+        }
+    `;
 
     // Handling
-    console.log('started');
-    const response = await request('http://localhost:4000/graphql', query);
-    console.log(response)
+    try {
+      await request('http://localhost:4000/graphql', query);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   });
 }
 

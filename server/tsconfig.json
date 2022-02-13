@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    "lib": ["esnext"],
+    "baseUrl": "./",
+    "lib": [
+      "esnext"
+    ],
     "strict": false,
     "noImplicitAny": false
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "script/**/*",
+    "prisma/**/*"
+  ]
 }
