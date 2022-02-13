@@ -27,7 +27,7 @@ export function SourcesList() {
       <ul>
         {
           sources.map(source =>
-            <li>
+            <li key={source.id}>
               <Link to={`/sources/${source.id}`}>
                 {source.title}
               </Link>
