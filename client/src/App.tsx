@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Source } from './page/Source/Source';
 import { Post } from './page/Post/Post';
 
+// TODO `Refactor routes`
 function App() {
   return (
     <div className='App'>

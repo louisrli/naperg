@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { gql, request } from 'graphql-request';
+import { Urls } from '../../lib/urls';
 
 export function Post() {
   const [post, setPost] = useState([]);
@@ -8,6 +9,7 @@ export function Post() {
 
   useEffect(() => {
     (async () => {
+      // TODO `remove properties that not need`
       const query = gql`
           query Post($postId: Int) {
               post(postId: $postId) {
@@ -24,15 +26,16 @@ export function Post() {
       `;
 
       const variables = {
-        postId: +id,
+        postId: parseInt(id, 10),
       };
 
-      const response = await request('http://localhost:4000/graphql', query, variables);
+      const response = await request(Urls.graphql, query, variables);
       setPost(response?.post);
     })();
   }, []);
 
 
+  // @ts-ignore avoid ts-ignore and add types for response
   return (
     <div>
       <h1>

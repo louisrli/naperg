@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { gql, request } from 'graphql-request';
+import { Urls } from '../../lib/urls';
 
 export function Source() {
   const [posts, setPosts] = useState([]);
@@ -19,14 +20,14 @@ export function Source() {
           }
       `;
 
+      // TODO `avoid magic number and implement select total and page`
       const variables = {
-        sourceId: +id,
+        sourceId: parseInt(id, 10),
         total: 10,
         page: 1,
       };
 
-      const response = await request('http://localhost:4000/graphql', query, variables);
-      console.log(response);
+      const response = await request(Urls.graphql, query, variables);
       setPosts(response?.sourcePostsPaginated || []);
     })();
   }, []);

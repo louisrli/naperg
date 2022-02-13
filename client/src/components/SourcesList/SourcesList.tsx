@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { request, gql } from 'graphql-request';
 import { Link } from 'react-router-dom';
+import { Urls } from '../../lib/urls';
 
 
 export function SourcesList() {
@@ -17,7 +18,7 @@ export function SourcesList() {
           }
       `;
 
-      const response = await request('http://localhost:4000/graphql', query);
+      const response = await request(Urls.graphql, query);
       setSources(response?.sources || []);
     })();
   }, []);
