@@ -3,14 +3,20 @@
     "outDir": "dist",
     "baseUrl": "./",
     "lib": [
-      "esnext"
+      "es2021"
     ],
+    "target": "es2021",
     "strict": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src/**/*",
     "script/**/*",
     "prisma/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

@@ -22,17 +22,17 @@ async function main() {
   // TODO: Use a GraphQL client or a simple `fetch` to call the endpoint to
   // refresh all feeds with the appropriate arguments.
 
-  // */10 every 10 seconds
-  scheduleJob('* * * * *', async () => {
+  const ten = 10;
+  scheduleJob(`* ${ten} * * *`, async () => {
     const query = gql`
         mutation Mutation {
             refreshFeeds
         }
     `;
 
-    // Handling
     try {
       await request('http://localhost:4000/graphql', query);
+      console.info('puller succeed');
     } catch (e) {
       console.error(e);
       throw e;

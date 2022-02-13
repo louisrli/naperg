@@ -17,4 +17,7 @@ const schema = makeExecutableSchema({
 new ApolloServer({ schema, context: createContext }).listen(
   { port: 4000 },
   () => console.log(`🚀 Server ready at: http://localhost:4000 ⭐️⭐️⭐️⭐️`),
-);
+).catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
