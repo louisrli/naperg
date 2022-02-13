@@ -24,6 +24,26 @@ export const resolvers = {
       const { sourceId } = args;
       return ctx.prisma.post.findMany({ where: { sourceId } })
     },
+    sourcePostsPaginated: (parent, args, ctx: Context) => {
+      const { sourceId, total, page } = args;
+      let offset = 0
+      if (page) {
+        offset = total * page - total
+      }
+
+      return ctx.prisma.post.findMany({
+        where: { sourceId },
+        skip: offset,
+        take: total,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
+    },
+    source: async (parent, args, ctx: Context) => {
+      const { sourceId } = args;
+      return ctx.prisma.source.findUnique({ where: { id: sourceId } })
+    },
     post: (parent, args, ctx: Context) => {
       const { postId } = args;
       return ctx.prisma.post.findUnique({ where: { id: postId } })

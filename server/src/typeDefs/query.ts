@@ -7,6 +7,8 @@ export const query = gql`
         userSettings(userId: Int): UserSetting!
         post(postId: Int): Post
         sourcePosts(sourceId: Int): [Post]
+        source(sourceId: Int): Source
+        sourcePostsPaginated(sourceId: Int, total: Int, page: Int): [Post]
         sources: [Source]
 
 
