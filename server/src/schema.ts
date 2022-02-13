@@ -11,13 +11,16 @@ import { rssMutationResolvers } from './resolvers/rss';
 
 export const resolvers = {
   Query: {
-    getUser: (parent, args, ctx: Context) => {
+    user: (parent, args, ctx: Context) => {
       const { userId } = args;
 
       if (!userId) throw new Error('Bad request');
       return ctx.prisma.user.findUnique({ where: { id: userId } });
     },
-    getUserSettings: (parent, args, ctx: Context) => {
+    sources: (parent, args, ctx: Context) => {
+      return ctx.prisma.source.findMany()
+    },
+    userSettings: (parent, args, ctx: Context) => {
       // just for now
       // in future get userId from session
       const { userId } = args;

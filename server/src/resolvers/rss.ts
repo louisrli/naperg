@@ -26,8 +26,6 @@ export const rssMutationResolvers = {
     // TODO: Using Prisma, query for all sources. Filter only for stale sources,
     // either using Prisma filters or using code.
     const staleSources: Source[] = await ctx.prisma.source.findMany();
-    console.log(staleSources);
-
 
     for (const source of staleSources) {
       // TODO: For each stale source, use an RSS parser of your choice to parse the RSS feed.
@@ -53,14 +51,6 @@ export const rssMutationResolvers = {
               },
             });
           }
-          // in future PRs we gonna use it snippet stuff
-          // await ctx.prisma.post.upsert({
-          //   // @ts-ignore
-          //   where: { title },
-          //   update: {},
-          //   // @ts-ignore
-          //   create: { title, url, content: content || description, sourceId: source.id },
-          // });
         }
       } catch (e) {
         console.error(e);
