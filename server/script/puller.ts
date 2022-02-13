@@ -15,10 +15,26 @@
  * For further reference, see "architecture 0" on the lecture slides.
  */
 
+import { scheduleJob } from 'node-schedule';
+import { request, gql } from 'graphql-request';
+
 async function main() {
   // TODO: Use a GraphQL client or a simple `fetch` to call the endpoint to
   // refresh all feeds with the appropriate arguments.
 
+  // */10 every 10 seconds
+  scheduleJob('1 * * * *', async () => {
+    const query = gql`
+         mutation Mutation {
+             refreshFeeds
+         }
+     `;
+
+    // Handling
+    console.log('started');
+    const response = await request('http://localhost:4000/graphql', query);
+    console.log(response)
+  });
 }
 
 // TODO: Last time, people seemed confused about where the "scheduling"
@@ -33,7 +49,6 @@ async function main() {
 // 3. And what about for once every 10 minutes?
 main()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-
+    console.error(e);
+    process.exit(1);
+  });
