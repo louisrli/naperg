@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { request, gql } from 'graphql-request';
+import { Link } from 'react-router-dom';
 
 
 export function SourcesList() {
@@ -17,7 +18,6 @@ export function SourcesList() {
       `;
 
       const response = await request('http://localhost:4000/graphql', query);
-      console.log(response);
       setSources(response?.sources || []);
     })();
   }, []);
@@ -25,10 +25,14 @@ export function SourcesList() {
   return (
     <div>
       <ul>
-        {sources.map(source =>
-          <li>
-            {source.title}
-          </li>)
+        {
+          sources.map(source =>
+            <li>
+              <Link to={`/sources/${source.id}`}>
+                {source.title}
+              </Link>
+            </li>,
+          )
         }
       </ul>
     </div>
