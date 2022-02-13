@@ -1,4 +1,5 @@
-export function Post({ title, content, url) {
+// @ts-ignore
+export function Post({ title, content, url}) {
   return (
     <div>
       <h1>

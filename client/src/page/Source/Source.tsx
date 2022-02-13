@@ -1,3 +1,4 @@
+// @ts-ignore
 export function Source({ title }) {
   return (
     <div>

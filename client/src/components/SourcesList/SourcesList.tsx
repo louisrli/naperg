@@ -7,18 +7,30 @@ export function SourcesList() {
   useEffect(() => {
     (async () => {
       const query = gql`
-          mutation Mutation {
-              refreshFeeds
+          query Sources {
+              sources {
+                  id
+                  title
+                  url
+              }
           }
       `;
-      const data = await request('http://localhost:4000/graphql', query);
-      setSources()
+
+      const response = await request('http://localhost:4000/graphql', query);
+      console.log(response);
+      setSources(response?.sources || []);
     })();
   }, []);
 
   return (
     <div>
-      List of source
+      <ul>
+        {sources.map(source =>
+          <li>
+            {source.title}
+          </li>)
+        }
+      </ul>
     </div>
   );
 }
