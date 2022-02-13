@@ -20,6 +20,14 @@ export const resolvers = {
     sources: (parent, args, ctx: Context) => {
       return ctx.prisma.source.findMany()
     },
+    sourcePosts: (parent, args, ctx: Context) => {
+      const { sourceId } = args;
+      return ctx.prisma.post.findMany({ where: { sourceId } })
+    },
+    post: (parent, args, ctx: Context) => {
+      const { postId } = args;
+      return ctx.prisma.post.findUnique({ where: { id: postId } })
+    },
     userSettings: (parent, args, ctx: Context) => {
       // just for now
       // in future get userId from session

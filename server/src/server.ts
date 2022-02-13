@@ -6,10 +6,11 @@ import { query } from './typeDefs/query';
 import { user } from './typeDefs/user';
 import { feed } from './typeDefs/feed';
 import { source } from './typeDefs/source';
+import { post } from './typeDefs/post';
 import { mutation } from './typeDefs/mutation';
 
 const schema = makeExecutableSchema({
-  typeDefs: [query, user, feed, source, mutation],
+  typeDefs: [query, user, feed, source, post, mutation],
   resolvers,
 });
 
