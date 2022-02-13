@@ -25,6 +25,7 @@ export const rssMutationResolvers = {
   refreshFeeds: async (parent, args, ctx: Context) => {
     // TODO: Using Prisma, query for all sources. Filter only for stale sources,
     // either using Prisma filters or using code.
+    // TODO: Next sprint refactor
     const staleSources: Source[] = await ctx.prisma.source.findMany();
 
     for (const source of staleSources) {
@@ -77,6 +78,7 @@ export const rssMutationResolvers = {
  */
 interface ParsedArticle {
   // TODO: Specify your custom type.
+  // TODO: Next sprint
 }
 
 /**
@@ -88,6 +90,7 @@ interface ParsedArticle {
  */
 const parseRssFeed = async (url: string): Promise<ParsedArticle[]> => {
   // TODO: Use the RSS parser here. This has been separated into its own
+  // TODO: Next sprint
   // function for cleanliness.
 
   const parser: Parser<any, any> = new Parser({ xml2js: true });
