@@ -7,6 +7,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+header {
+  text-align: right;
+  padding: 10px;
+}
+
+header a:not(:last-child) {
+  margin-right: 20px;
+}
+
+button { 
+  display: block;
+}
+
+.user {
+  padding: 30px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
