@@ -5,6 +5,8 @@ import config from './config';
 import { AuthenticationError, UserInputError } from 'apollo-server-errors';
 import { rssMutationResolvers } from './resolvers/rss';
 
+const COUNT_OF_HEADLINES = 10
+
 export const resolvers = {
   Query: {
     user: async (parent, args, ctx: Context) => {
@@ -17,6 +19,25 @@ export const resolvers = {
     },
     sources: (parent, args, ctx: Context) => {
       return ctx.prisma.source.findMany()
+    },
+    headlines: async (parent, args, ctx: Context) => {
+      const headlines = await ctx.prisma.headline.findMany({
+        skip: 0,
+        take: COUNT_OF_HEADLINES,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          post: {
+            include: {
+              source: true,
+            },
+          }
+        }
+      })
+
+      return headlines.map(el => el.post)
+
     },
     sourcePosts: (parent, args, ctx: Context) => {
       const { sourceId } = args;
@@ -38,6 +59,9 @@ export const resolvers = {
         orderBy: {
           createdAt: 'desc',
         },
+        include: {
+          source: true,
+        },
       })
     },
     source: async (parent, args, ctx: Context) => {
@@ -46,7 +70,12 @@ export const resolvers = {
     },
     post: (parent, args, ctx: Context) => {
       const { postId } = args;
-      return ctx.prisma.post.findUnique({ where: { id: postId } })
+      return ctx.prisma.post.findUnique({
+        where: { id: postId },
+        include: {
+          source: true,
+        }
+      })
     },
     userSettings: async (parent, args, ctx: Context) => {
 
