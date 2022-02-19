@@ -15,8 +15,8 @@ export const query = gql`
   
   type Query {
       # user: User!
-      user(userId: Int): User!
-      userSettings(userId: Int): UserSetting!
+      user: User!
+      userSettings: UserSetting!
       post(postId: Int): Post
       sourcePosts(sourceId: Int): [Post] @cacheControl(maxAge: 30)
       source(sourceId: Int): Source

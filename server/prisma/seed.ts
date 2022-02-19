@@ -8,11 +8,12 @@ async function main() {
   await prisma.post.deleteMany();
   await prisma.sourceFeedRelation.deleteMany();
   await prisma.source.deleteMany();
+  await prisma.setting.deleteMany();
   await prisma.feed.deleteMany();
   await prisma.user.deleteMany();
 
   for (let id = 1; id <= 10; id++) {
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         id,
         fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -20,6 +21,14 @@ async function main() {
         password: faker.internet.password(),
       },
     });
+
+    await prisma.setting.create({
+      data: {
+        id,
+        userId: user.id,
+        theme: 'light'
+      }
+    })
   }
 
   const sources = [{
