@@ -1,9 +1,11 @@
-import { useNavigate, useParams } from 'react-router';
+// import { useNavigate, useParams } from 'react-router';
+import {  useParams } from 'react-router';
 import { useQuery, gql } from '@apollo/client';
+import {PostPreview} from '../../components/PostPreview/PostPreview'
 
 export function Source() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const query = gql`
     query SourcePostsPaginated($sourceId: Int, $total: Int, $page: Int) {
@@ -30,14 +32,8 @@ export function Source() {
       <ul>
         {data?.sourcePostsPaginated.map((post) => (
           <li key={post.id}>
-            <h4>{post.title}</h4>
-            <button
-              onClick={() => {
-                navigate(`/posts/${post.id}`);
-              }}
-            >
-              read more
-            </button>
+            {/* @ts-ignore*/}
+            <PostPreview title={post.title} id={post.id}/>
           </li>
         ))}
       </ul>
