@@ -15,30 +15,32 @@
  * For further reference, see "architecture 0" on the lecture slides.
  */
 
-import { scheduleJob } from 'node-schedule';
 import { request, gql } from 'graphql-request';
+import { CronJob } from 'cron';
 
 async function main() {
   // TODO: Use a GraphQL client or a simple `fetch` to call the endpoint to
   // refresh all feeds with the appropriate arguments.
 
-  const ten = 10;
-  scheduleJob(`* ${ten} * * *`, async () => {
+  const job = new CronJob('1 * * * * *', async () => {
     const query = gql`
         mutation Mutation {
             refreshFeeds
         }
     `;
-
     try {
-      console.info('Puller started');
       await request('http://localhost:4000/graphql', query);
-      console.info('puller succeed');
+      console.info('puller succeed')
     } catch (e) {
       console.error(e);
       throw e;
     }
-  }).invoke();
+  });
+
+
+
+  // start puller job
+  job.start()
 }
 
 // TODO: Last time, people seemed confused about where the "scheduling"

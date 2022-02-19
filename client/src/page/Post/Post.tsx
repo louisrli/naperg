@@ -1,51 +1,42 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { gql, request } from 'graphql-request';
-import { Urls } from '../../lib/urls';
+import { useQuery, gql } from '@apollo/client';
 
 export function Post() {
-  const [post, setPost] = useState([]);
   const { id } = useParams();
 
-  useEffect(() => {
-    (async () => {
-      // TODO `remove properties that not need`
-      const query = gql`
-          query Post($postId: Int) {
-              post(postId: $postId) {
-                  id
-                  sourceId
-                  title
-                  content
-                  url
-                  imgUrl
-                  createdAt
-                  updatedAt
-              }
-          }
-      `;
+  const query = gql`
+    query Post($postId: Int) {
+      post(postId: $postId) {
+        id
+        sourceId
+        title
+        content
+        url
+        imgUrl
+        createdAt
+        updatedAt
+      }
+    }
+  `;
 
-      const variables = {
-        postId: parseInt(id, 10),
-      };
+  const variables = {
+    postId: parseInt(id, 10),
+  };
 
-      const response = await request(Urls.graphql, query, variables);
-      setPost(response?.post);
-    })();
-  }, []);
+  const { loading, error, data } = useQuery(query, { variables });
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
 
-  // @ts-ignore avoid ts-ignore and add types for response
+  const { post } = data || {};
+
   return (
     <div>
-      <h1>
-        {/*@ts-ignore*/}
-        {post.title}
-      </h1>
-      {/*@ts-ignore*/}
+      <h1>{post.title}</h1>
       <p dangerouslySetInnerHTML={{ __html: post.content }} />
-      {/*@ts-ignore*/}
-      <a href={post.url} target='_blank'>investigate us</a>
+      <a href={post.url} target='_blank' rel='noreferrer'>
+        investigate us
+      </a>
     </div>
   );
 }
