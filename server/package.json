@@ -4,7 +4,8 @@
     "start:dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
     "start": "ts-node src/server.ts",
     "seed": "ts-node prisma/seed.ts",
-    "start:puller": "ts-node script/puller.ts"
+    "start:puller": "ts-node script/puller.ts",
+    "start:api:puller": "sh dev.sh"
   },
   "dependencies": {
     "@faker-js/faker": "^6.0.0-alpha.5",
