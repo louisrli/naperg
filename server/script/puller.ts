@@ -31,13 +31,14 @@ async function main() {
     `;
 
     try {
+      console.info('Puller started');
       await request('http://localhost:4000/graphql', query);
       console.info('puller succeed');
     } catch (e) {
       console.error(e);
       throw e;
     }
-  });
+  }).invoke();
 }
 
 // TODO: Last time, people seemed confused about where the "scheduling"

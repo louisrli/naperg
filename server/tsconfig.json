@@ -1,22 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": "./",
+    "rootDir": "src",
     "lib": [
-      "es2021"
+      "esnext"
     ],
-    "target": "es2021",
     "strict": false,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true
+    "noImplicitAny": false
   },
   "include": [
-    "src/**/*",
-    "script/**/*",
-    "prisma/**/*"
-  ],
-  "exclude": [
-    "node_modules"
+    "src/**/*"
   ]
 }

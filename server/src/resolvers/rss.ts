@@ -5,6 +5,7 @@
  * files. Note that there are many ways to do this, depending on how large your
  * app is.
  */
+
 import { Source } from '@prisma/client';
 import * as Parser from 'rss-parser';
 import { Context } from '../model/appInterface';
@@ -25,7 +26,7 @@ export const rssMutationResolvers = {
   refreshFeeds: async (parent, args, ctx: Context) => {
     // TODO: Using Prisma, query for all sources. Filter only for stale sources,
     // either using Prisma filters or using code.
-    // TODO: Next sprint refactor
+
     const staleSources: Source[] = await ctx.prisma.source.findMany();
 
     for (const source of staleSources) {
