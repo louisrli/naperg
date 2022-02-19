@@ -1,7 +1,9 @@
 export function Home() {
-  return (<div>
+  return (
     <div>
-      <p>Hello, that's super application here you read awesome rss feeds</p>
+      <div>
+        <p>Hello, that's super application here you read awesome rss feeds</p>
+      </div>
     </div>
-  </div>);
+  );
 }

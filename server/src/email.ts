@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { User } from '@prisma/client';
 import { Context } from './model/appInterface';
 

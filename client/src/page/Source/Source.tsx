@@ -1,45 +1,53 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { gql, request } from 'graphql-request';
-import { Link } from 'react-router-dom';
+import { Urls } from '../../lib/urls';
 
 export function Source() {
   const [posts, setPosts] = useState([]);
   const { id } = useParams();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     (async () => {
       const query = gql`
-          query Query($sourceId: Int) {
-              sourcePosts(sourceId: $sourceId) {
+          query SourcePostsPaginated($sourceId: Int, $total: Int, $page: Int) {
+              sourcePostsPaginated(sourceId: $sourceId, total: $total, page: $page) {
                   id
-                  sourceId
                   title
-                  url
-                  imgUrl
-                  createdAt
               }
           }
       `;
 
+      // TODO `avoid magic number and implement select total and page`
       const variables = {
-        'sourceId': +id,
+        sourceId: parseInt(id, 10),
+        total: 10,
+        page: 1,
       };
 
-      const response = await request('http://localhost:4000/graphql', query, variables);
-      setPosts(response?.sourcePosts || []);
+      const response = await request(Urls.graphql, query, variables);
+      setPosts(response?.sourcePostsPaginated || []);
     })();
   }, []);
 
   return (
     <div>
       <ul>
-        {posts.map(post =>
-          <li>
-            <Link to={'null'}>
-              {post.title}
-            </Link>
-          </li>)}
+        {
+          posts.map(post =>
+            <li key={post.id}>
+              <h4>
+                {post.title}
+              </h4>
+              <button onClick={() => {
+                navigate(`/posts/${post.id}`);
+              }}>
+                read more
+              </button>
+            </li>,
+          )}
       </ul>
     </div>
   );
