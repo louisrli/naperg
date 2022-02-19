@@ -64,17 +64,28 @@ model UserActivatedSubscription {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   title     String
   content   String
   url       String
   imgUrl    String?
-  source    Source   @relation(fields: [sourceId], references: [id])
+  source    Source     @relation(fields: [sourceId], references: [id])
   sourceId  Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Headline  Headline[]
+
+  @@map("posts")
+}
+
+model Headline {
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("posts")
+  @@map("headlines")
 }
 
 // A single source that should be updated.
